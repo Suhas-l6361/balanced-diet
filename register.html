@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balanced Diet – Signup</title>
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    /* —— Reset & Base —— */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #FFDAB3 0%, #FFE5CC 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* —— Container —— */
+    .container {
+      display: grid; grid-template-columns: 1fr 1fr;
+      width: 90vw; max-width: 1200px; height: 80vh;
+      background: #FFF; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    /* —— Left Panel (chat) —— */
+    .left-panel {
+      position: relative;
+      background: linear-gradient(145deg, #FFE0B2, #FFCC80);
+      padding: 40px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .logo {
+      font-size: 2.8rem; color: #D84315;
+      text-align: center; margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    .chat { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .bubble { display: flex; align-items: flex-start; gap: 15px; max-width: 75%; }
+    .bubble.doctor .text { background: #FFF3E0; color: #BF360C; border-radius:16px 16px 16px 0; }
+    .bubble.user { margin-left: auto; }
+    .bubble.user .text { background: #FFFFFF; color: #4E342E; border-radius:16px 16px 0 16px; }
+    .avatar { width: 48px; height: 48px; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .text { padding:14px; font-size:1rem; line-height:1.4; }
+
+    /* —— Right Panel (form) —— */
+    .right-panel { display:flex; align-items:center; justify-content:center; background:#FAFAFA; }
+    .signup-form {
+      width:100%; max-width:320px; padding:40px;
+      background:#FFF; border-radius:16px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.05);
+      text-align:center;
+    }
+    .signup-form h2 { margin-bottom:30px; font-size:1.8rem; color:#4E342E; }
+    .field { position:relative; margin-bottom:20px; }
+    .field i {
+      position:absolute; left:12px; top:50%; transform:translateY(-50%);
+      color:#FB8C00;
+    }
+    .field input {
+      width:100%; padding:12px 12px 12px 40px;
+      border:1px solid #DDD; border-radius:12px; font-size:1rem;
+    }
+    .signup-form button {
+      width:100%; padding:14px; background:#FB8C00;
+      border:none; border-radius:12px; color:#FFF; font-size:1rem;
+      cursor:pointer; margin-top:10px; transition:background 0.3s;
+    }
+    .signup-form button:hover { background:#E65100; }
+    .login-link { margin-top:15px; font-size:0.9rem; color:#888; }
+    .login-link a { color:#4E342E; font-weight:600; text-decoration:none; }
+
+    /* —— Modal Styles —— */
+    .modal {
+      display: none; position: fixed; z-index: 999;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: #FFF; padding: 20px; border-radius: 12px;
+      width: 90%; max-width: 400px; text-align: center; position: relative;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    }
+    .close-btn {
+      position: absolute; top: 12px; right: 12px;
+      font-size: 1.4rem; cursor: pointer; color: #888;
+    }
+    .modal-icon { font-size: 3rem; margin-bottom: 10px; }
+    .modal-message { font-size: 1rem; color: #4E342E; margin-bottom: 20px; }
+    .modal-ok-btn {
+      padding: 10px 20px; border: none; border-radius: 12px;
+      background: #FB8C00; color: #FFF; font-size: 1rem;
+      cursor: pointer; display: inline-block;
+    }
+
+    /* hide OK button for error & failure */
+    .modal.error .modal-ok-btn,
+    .modal.failure .modal-ok-btn {
+      display: none;
+    }
+    /* icon colors */
+    .modal.success .modal-icon { color: #4CAF50; }
+    .modal.error   .modal-icon { color: #2196F3; }
+    .modal.failure .modal-icon { color: #F44336; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <h1 class="logo">Balanced Diet</h1>
+      <div class="chat">
+        <div class="bubble doctor">
+          <img src="https://png.pngtree.com/png-vector/20240204/ourmid/pngtree-avatar-job-doctor-flat-portrait-of-man-png-image_11607324.png"
+               alt="Doctor" class="avatar"/>
+          <div class="text">Good morning! How can I help with your diet today?</div>
+        </div>
+        <div class="bubble user">
+          <img src="https://www.pngkey.com/png/full/72-729716_user-avatar-png-graphic-free-download-icon.png"
+               alt="You" class="avatar"/>
+          <div class="text">I need advice on a low-carb meal plan.</div>
+        </div>
+        <div class="bubble doctor">
+          <img src="https://png.pngtree.com/png-vector/20240204/ourmid/pngtree-avatar-job-doctor-flat-portrait-of-man-png-image_11607324.png"
+               alt="Doctor" class="avatar"/>
+          <div class="text">Focus on veggies, lean protein, and healthy fats.</div>
+        </div>
+        <div class="bubble user">
+          <img src="https://www.pngkey.com/png/full/72-729716_user-avatar-png-graphic-free-download-icon.png"
+               alt="You" class="avatar"/>
+          <div class="text">Thank you, Doctor—it means a lot!</div>
+        </div>
+        <div class="bubble doctor">
+          <img src="https://png.pngtree.com/png-vector/20240204/ourmid/pngtree-avatar-job-doctor-flat-portrait-of-man-png-image_11607324.png"
+               alt="Doctor" class="avatar"/>
+          <div class="text">You’re always welcome 😊</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <form class="signup-form" id="registrationForm">
+        <h2>Create Account</h2>
+        <div class="field">
+          <i class="fas fa-user"></i>
+          <input type="text" placeholder="Full Name" required />
+        </div>
+        <div class="field">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="registeremail" placeholder="Email Address" required />
+        </div>
+        <div class="field">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="registerpassword" placeholder="Password (min 6 chars)" minlength="6" required />
+        </div>
+        <button type="submit">Sign Up</button>
+        <p class="login-link">
+          Already have an account? <a href="./login.html">Log in</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Custom Modal -->
+  <div id="customModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div class="modal-icon"></div>
+      <p class="modal-message"></p>
+      <button class="modal-ok-btn">OK</button>
+    </div>
+  </div>
+
+  <script type="module" src="./register.js"></script>
+</body>
+</html>

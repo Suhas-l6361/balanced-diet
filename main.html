@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balanced Diet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #FFE5CC, #FFF5E1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .back-btn {
+      background: #FF944D;
+      color: white;
+      border: none;
+      font-size: 1.4rem;
+      padding: 8px 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .back-btn:hover { background: #e56b1c; }
+    h1 { font-size: 2rem; color: #333; }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    select, button {
+      padding: 10px 16px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+    select {
+      border: 1.5px solid #aaa;
+      min-width: 160px;
+      transition: border 0.3s;
+    }
+    select:focus { outline: none; border-color: #FF944D; }
+    #submit {
+      background: #FF944D;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #submit:hover { background: #e56b1c; }
+
+    .card {
+      background: #FFF8F0;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      flex-wrap: wrap;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      display: flex;
+    }
+
+    .food-img-container {
+      flex: 1 1 300px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .food-img {
+      width: 100%;
+      max-width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+    }
+
+    .content {
+      flex: 2 1 600px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .section {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .section.full-width {
+      grid-column: 1 / -1;
+    }
+
+    h2.title {
+      color: #40210f;
+      margin-bottom: 12px;
+      grid-column: 1 / -1;
+    }
+
+    h3.section-title {
+      margin-bottom: 8px;
+      color: #8B4513;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h3.section-title img {
+      width: 20px;
+      height: 20px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 800px;
+      height: 450px;
+      border-radius: 12px;
+      border: none;
+    }
+
+    .consultant {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #FF944D;
+    }
+
+    .consultant-info p { margin: 0; }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      transition: background 0.3s;
+    }
+
+    .whatsapp-btn:hover { background: #1ebc57; }
+
+    .whatsapp-btn img {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <button class="back-btn" onclick="location.href='./home.html'">←</button>
+    <h1>Balanced Diet</h1>
+  </header>
+
+  <section class="controls">
+    <select id="disorder">
+      <option value="" disabled selected>Loading...</option>
+    </select>
+    <select id="age">
+      <option value="" disabled selected>Select Age</option>
+      <option value="below 18">Below 18</option>
+      <option value="above 18">Above 18</option>
+    </select>
+    <button id="submit">SUBMIT</button>
+  </section>
+
+  <div id="results"></div>
+</div>
+
+<script>
+  const disorderSelect = document.getElementById("disorder");
+  const resultsContainer = document.getElementById("results");
+
+  const consultants = [
+    { name: "Dr. Arvind Mehta", title: "Dietitian", exp: "10+ Years" },
+    { name: "Dr. Neha Reddy", title: "Nutritionist", exp: "7 Years" },
+    { name: "Dr. Rohit Sinha", title: "Ayurvedic Expert", exp: "12 Years" },
+    { name: "Dr. Kavya Desai", title: "Pediatric Dietitian", exp: "6 Years" },
+    { name: "Dr. Manoj Iyer", title: "Fitness Coach", exp: "9 Years" },
+    { name: "Dr. Swati Ghosh", title: "Clinical Nutritionist", exp: "8 Years" },
+    { name: "Dr. Farhan Ali", title: "Cardiac Dietitian", exp: "11 Years" },
+    { name: "Dr. Priya Sharma", title: "Holistic Healer", exp: "10 Years" }
+  ];
+
+  const foodImages = {
+    "Amla & Honey Juice":"https://www.healthshots.com/wp-content/uploads/2020/06/Amla-Juice.jpg",
+    "Moong Dal Khichdi":"https://greenbowl2soul.com/wp-content/uploads/2020/01/moong-dal-khichdi.jpg",
+    "Rajma (Kidney Bean) Curry":"https://www.cookwithmanali.com/wp-content/uploads/2014/10/Rajma-Kidney-Beans-Curry-500x500.jpg",
+"Banana Sheera (Banana Halwa)":"http://www.vegrecipesofindia.com/wp-content/uploads/2013/01/banana-sheera-recipe-4.jpg",
+"Oats Vegetable Upma":"http://www.spiceindiaonline.com/wp-content/uploads/oats-upma-3.jpg",
+"Pepper Rasam":"https://www.archanaskitchen.com/images/archanaskitchen/1-Author/admin/Jeera_Milagu_Rasam_Recipe___South_Indian_Pepper_Cumin_Rasam.jpg",
+"Tulsi-Ginger Kadha":"https://images.onlymyhealth.com/webstories/14431/listing-1699204352.jpeg",
+" Moong Dal Khichdi":"https://www.livofy.com/health/wp-content/uploads/2021/07/Moong-Dal-Khichdi-1024x1024.jpg",
+"Tulsi-Ginger Herbal Water":"https://www.kent.co.in/blog/wp-content/uploads/2017/12/Tulsi-water.jpg",
+"Vegetable Clear Soup":"https://www.archanaskitchen.com/images/archanaskitchen/1-Author/sibyl-archanaskitchen.com/Veg_Clear_Soup_Recipe.jpg",
+"Ashwagandha Milk":"https://www.superfoodevolution.com/images/how-to-make-ashwagandha-milk.jpg",
+"Banana-Nut Smoothie":"http://nutritionfor.us/wp-content/uploads/2013/09/Creamy-banana-smoothie.jpg",
+"Khichdi with Ghee & Cumin":"https://aahaaramonline.com/wp-content/uploads/2016/12/Bajra_Khichdi_Bajrichi_Khichdi-1024x683.png",
+"Ragi Porridge (Ragi Malt)":"https://image.freepik.com/free-photo/sweet-ragi-malt-healthy-ragi-porridge-bowl-garnished-with-crushed-dry-fruits_466689-23604.jpg",
+"Dates & Nuts Ladoo":"https://i.ytimg.com/vi/e4H9Sp-V8QA/maxresdefault.jpg",
+"Sprouted Moong Salad":"http://www.archanaskitchen.com/images/archanaskitchen/0-Archanas-Kitchen-Recipes/2016/1-Archana/Green_Mung_Sprouts_Salad.jpg",
+"Ragi Porridge (Ragi Malt)":"https://i.ytimg.com/vi/06Ltlg6fM1w/maxresdefault.jpg",
+"Dates & Nuts Ladoo":"https://1.bp.blogspot.com/-h6MYjtoCpyA/WAbpAtXJHII/AAAAAAAAAXs/DR7M13Ro3LMqt9s8XDUB0LgItG3G_MznACLcB/s1600/date_nut_ladoo.jpg",
+"Beetroot and Carrot Soup":"https://blog.pureindianfoods.com/wp-content/uploads/2018/05/beet-root-soup.jpg",
+"Turmeric-Garlic Rice":"https://bitesofwellness.com/wp-content/uploads/2023/02/turmeric-garlic-rice-social-1024x1024.jpg",
+"Methi (Fenugreek) Water Khichdi":"https://i1.wp.com/curryandvanilla.com/wp-content/uploads/2018/01/fried-oats-and-lentils.jpg?resize=600%2C450&ssl=1",
+"Amla__Gooseberry_Juice_Chutney":"https://3.bp.blogspot.com/_0CWdGn9Gu5c/TSWVYoRUpqI/AAAAAAAAHrg/Z5XURvJD6TM/s1600/amla+juice+good+good.jpg",
+"Moong Dal & Turmeric Soup":"https://img-global.cpcdn.com/recipes/657c92601f7224a9/680x482cq70/moong-dal-soup-recipe-main-photo.jpg",
+"Curry Leaves & Coconut Chutney":"https://www.blendwithspices.com/wp-content/uploads/2013/07/curry-leaves-coconut-chutney-recipe.jpg",
+" Spinach (Palak) Dal":"https://indianhotpot.com/wp-content/uploads/2020/09/dal-palak-scaled.jpg",
+"Aliv Seeds (Garden Cress) Kheer":"https://i.ytimg.com/vi/zZe_34eoY0Q/maxresdefault.jpg",
+"Carrot & Beetroot Halwa":"https://cdn.babychakra.com/babychakraserviceproviders/1000x1000/articles/normal/1573/article_584547c7d8d9d.jpg",
+"Spinach-Moong Dal Curry":"http://www.southindianfoods.in/recipe_picture_enlarge/dal-palak-curry.jpg",
+" Amla & Honey Juice":"https://www.southindianfoods.in/recipe_picture_enlarge/nellikai-juice-amla-juice.jpg",
+"Methi (Fenugreek) Leaves Thepla":"https://i.pinimg.com/originals/af/07/0e/af070ea4e10c05abd432ba3109ae47c7.jpg",
+"Brazil Nut & Spinach Stir-fry":"https://www.thespruceeats.com/thmb/a0UQ119TnGZQTGkK0LEkEFw6VZA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/stir-fry-spinach-with-garlic-695345-step-04-712964ff20ed401f8ae128247c9bfde9.jpg",
+"Moong Dal Idli with Flaxseeds":"https://www.subbuskitchen.com/wp-content/uploads/2020/03/Moong-Dal-Idli_finalforweb1-scaled.jpg",
+"Barley Water":"https://www.indianhealthyrecipes.com/wp-content/uploads/2013/04/barley-water.jpg",
+"Palak (Spinach) Moong Khichdi":"https://vanitascorner.com/wp-content/uploads/2018/07/Palak-Khichdi_21-1024x767.jpg",
+"Beetroot & Carrot Juice":"https://www.elgiultra.com/ultraliving/wp-content/uploads/2019/10/carrot-beetroot-juice.jpg",
+"Spinach (Palak) Dal":"http://www.archanaskitchen.com/images/archanaskitchen/Indian_Dal_Khadi_Curry/Dal_Palak_Recipe_Healthy_Spinach_Lentil_Curry-2.jpg",
+"Black Sesame & Jaggery Ladoo":"https://www.subbuskitchen.com/wp-content/uploads/2019/09/Black-Gram-Jaggery-Ladoo_finalforweb7-500x500.jpg",
+"Fennel Seed & Cardamom Mouth Freshener":"https://c.ndtvimg.com/2024-02/ioemc0do_fennel-seeds-saunf_625x300_15_February_24.jpg",
+"Mint-Coriander Chutney":"https://www.foodie-trail.com/wp-content/uploads/2020/05/20200505_181033-scaled.jpg",
+"Jeera Ajwain Water (Digestive Detox Drink)":"https://www.fitterfly.com/blog/wp-content/uploads/2023/01/The-Incredible-Health-Benefits-of-Ajwain-Water.jpg",
+"Turmeric Ginger Milk":"https://i.pinimg.com/originals/ff/82/29/ff8229a7e8ac715a11a0ce5c46e743e7.jpg",
+"Drumstick (Moringa) Soup":"https://manjalbiriyani.com/wp-content/uploads/2023/09/1-11.jpg",
+"Flaxseed Chutney Powder":"http://3.bp.blogspot.com/-D6TH3T40zlU/T8ALRVnRC2I/AAAAAAAADVA/xkbuXAYYcz8/s640/Flaxseed+Chutney+Powder-001.JPG",
+"Dry Fruit Milkshake":"https://www.indianveggiedelight.com/wp-content/uploads/2023/04/dryfruits-milkshake-featured-720x720.jpg",
+    "Methi (Fenugreek) Laddu":"https://static.vecteezy.com/system/resources/previews/016/287/156/non_2x/fenugreek-or-methi-ke-laddu-laddo-or-laddoo-or-sweet-mithai-balls-for-boosting-immunity-in-winters-free-photo.jpg",
+    "Oats Upma":"https://www.sandyathome.com/wp-content/uploads/2020/09/oats-upma-768x432.jpg",
+    "Fenugreek Seeds (Methi Dana)":"https://www.faqs.com.pk/wp-content/uploads/2022/11/Health-Benefits-of-Methi-Dana-Fenugreek-Seeds-1024x683.jpg",
+    "bitter gourd(karela)":"https://www.onlyfoods.net/wp-content/uploads/2015/06/Bitter-Gourd-Curry-1024x772.jpg",
+    "Drumstick (Moringa) Curry":"https://1.bp.blogspot.com/-39cBNzgiElU/XwMocAtK25I/AAAAAAABLoo/HICQOrN5J9AK6_27CSb4CjTHqXxl23LdgCK4BGAsYHg/s886/IMG_1175.JPG",
+    "Garlic Rasam":"https://www.subbuskitchen.com/wp-content/uploads/2019/11/Garlic-Rasam_finalforweb3.jpg",
+    "Amla (Indian Gooseberry) Chutney":"https://i.pinimg.com/originals/92/d7/0e/92d70e954ef234b2fefb87629e0d4d21.jpg",
+    "Turmeric Milk (Haldi Doodh)":"https://www.archanaskitchen.com/images/archanaskitchen/Indian_Beverages/shutterstock_136278110.jpg",
+    "Beetroot Poriyal":"https://lh5.ggpht.com/-UpornaLPUnQ/TiaxbfRJhJI/AAAAAAAAGBo/EcSRKyEdlu8/Beetrootporiyal6.jpg",
+    "Bottle Gourd (Lauki)":"https://images.squarespace-cdn.com/content/v1/5d10b2995d7640000181db5d/1582544878351-2J2H2TRNJ8XXAF4TL3Z3/chhayas+food+lauki+bottle+gourd+ki+sabzi+ready+to+eat",
+    "Beetroot": "https://www.thespruceeats.com/thmb/SAy3YZUSW2p-TPL7IqDY41KRLDQ=/5472x3648/filters:no_upscale():max_bytes(150000):strip_icc()/go-to-easy-roast-beetroot-recipe-435699-Final-5bacfdedc9e77c002c964a93.jpg",
+    "Spinach (Palak)": "https://vegecravings.com/wp-content/uploads/2016/12/palak-paneer-recipe-step-by-step-instructions-cover.jpg",
+    "Sabudana Kheer (Lightly Sweetened)": "https://www.funfoodfrolic.com/wp-content/uploads/2021/10/Kheer-Blog-Thumbnail.jpg",
+    "Jeera (Cumin) Rice": "https://easyindiancookbook.com/wp-content/uploads/2021/11/Instant-Pot-Jeera-Rice-3-1200x1200.jpg",
+    "Coconut Water Poha": "https://cdn.apartmenttherapy.info/image/fetch/f_auto,q_auto:eco,c_fill,g_auto,w_1500,ar_3:2/https://storage.googleapis.com/gen-atmedia/3/2009/04/91e0456f38afa5e9bcd022948b9eae0972f5f0c9.jpeg",
+    "Palak_(Spinach)_Paneer": "https://www.indianhealthyrecipes.com/wp-content/uploads/2021/06/palak-paneer-recipe.jpg",
+    "Dates & Dry Fruit Ladoo": "https://www.madhuseverydayindian.com/wp-content/uploads/2020/06/dry-fruits-laddu.jpg",
+    "Rajma (Kidney Bean) Curry": "https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/7ae1580a-b3aa-4a41-a71d-2af1e83277cb_1581x1563.jpeg",
+    "Paneer Paratha": "http://1.bp.blogspot.com/-y7eqFVueeuY/UERXjPPaLwI/AAAAAAAATvs/_4-fSks-FBo/s1600/pp+twelve.jpg",
+    "Moong Dal Chilla": "https://cloudinary-cdn.whisk.com/image/upload/g_auto,c_fill,q_60,f_auto,h_630,w_1200/v1673464904/recipe/b16d2ab2f1c382273d04596034d959da.jpg",
+    "Lauki (Bottle Gourd) Soup": "https://4.bp.blogspot.com/_NP1CqlWhRC4/TSc-s1wozVI/AAAAAAAABc4/hMJW5SqkNx8/s1600/du2.jpg"
+    // ... (You can continue filling with the rest of the mappings)
+  };
+
+  fetch("http://localhost:5000/api/disorders")
+    .then(res => res.json())
+    .then(data => {
+      disorderSelect.innerHTML = '<option value="" disabled selected>Select Disorder</option>';
+      data.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.problems_name;
+        option.textContent = item.problems_name;
+        disorderSelect.appendChild(option);
+      });
+    });
+
+  document.getElementById("submit").addEventListener("click", () => {
+    const disorder = disorderSelect.value.trim();
+    const age = document.getElementById("age").value.trim().toLowerCase();
+    resultsContainer.innerHTML = "";
+
+    if (!disorder || !age) {
+      return alert("Please select both disorder and age.");
+    }
+
+    fetch(`http://localhost:5000/api/foods?disorder=${encodeURIComponent(disorder)}&age=${encodeURIComponent(age)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data || data.length === 0) return alert("No matching food found.");
+
+        data.forEach((item, index) => {
+          const embedUrl = item.vedio_url.replace("watch?v=", "embed/").split("&")[0];
+          const consultant = consultants[index % consultants.length];
+          const imageUrl = foodImages[item.foods] || "https://cdn-icons-png.flaticon.com/512/590/590685.png";
+          const ingredientList = item.ingredients.split(",").map(i => `<li>${i.trim()}</li>`).join("");
+          const cookingSteps = item.cooking_methods.split("\n").map(step => `<p>${step.trim()}</p>`).join("");
+
+          const card = document.createElement("section");
+          card.className = "card";
+          card.innerHTML = `
+            <div class="food-img-container">
+              <img src="${imageUrl}" alt="${item.foods}" class="food-img" />
+            </div>
+            <div class="content">
+              <h2 class="title">${item.foods}</h2>
+              <div class="section">
+                <h3 class="section-title"><img src="https://cdn-icons-png.flaticon.com/512/5804/5804976.png"/> Ingredients</h3>
+                <ul>${ingredientList}</ul>
+              </div>
+              <div class="section">
+                <h3 class="section-title"><img src="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"/> How to Cook</h3>
+                ${cookingSteps}
+              </div>
+              <div class="section full-width">
+                <h3 class="section-title"><img src="https://cdn-icons-png.flaticon.com/512/1008/1008925.png"/> Why It Helps</h3>
+                <p>${item.why_it_is}</p>
+              </div>
+              <div class="section full-width">
+                <h3 class="section-title"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"/> Video Guide</h3>
+                <iframe src="${embedUrl}" allowfullscreen></iframe>
+              </div>
+              <div class="section full-width">
+                <h3 class="section-title"><img src="https://cdn-icons-png.flaticon.com/512/2920/2920337.png"/> Consultant</h3>
+                <div class="consultant">
+                  <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" class="avatar"/>
+                  <div class="consultant-info">
+                    <p><strong>${consultant.name}</strong></p>
+                    <p>${consultant.title} | ${consultant.exp} Experience</p>
+                    <p>📞 ${item.consultant}</p>
+                    <a class="whatsapp-btn" href="https://wa.me/${item.consultant}" target="_blank">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111728.png" alt="WhatsApp" />
+                      Message on WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          resultsContainer.appendChild(card);
+        });
+      })
+      .catch(err => {
+        alert("Error fetching food data.");
+        console.error(err);
+      });
+  });
+</script>
+
+</body>
+</html>

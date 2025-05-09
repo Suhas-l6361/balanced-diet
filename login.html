@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balanced Diet – Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --beige: #F5EFE6;
+      --green: #75C5A9;
+      --coral: #FF6F61;
+      --dark:  #0B3D2E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #FFDAB3 0%, #FFE5CC 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--dark); position: relative;
+    }
+
+    .back-btn {
+      position: absolute; top: 16px; left: 32px;
+      background: var(--coral); color: #fff;
+      border: none; padding: 8px 16px;
+      border-radius: 12px; font-size: 1rem;
+      cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      display: grid; grid-template-columns: 1fr 1fr;
+      width: 90vw; max-width: 1200px; height: 80vh;
+      background: #FFF; border-radius: 20px;
+      overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .left-panel {
+      background: linear-gradient(145deg, #FFE0B2, #FFCC80);
+      padding: 40px; display: flex; flex-direction: column; justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 2.8rem; color: #D84315; text-align: center; margin-bottom: 20px;
+    }
+
+    .chat { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+    .bubble { display: flex; align-items: flex-start; gap: 15px; max-width: 75%; }
+    .bubble.doctor .text {
+      background: var(--beige); color: var(--dark);
+      border-radius: 16px 16px 16px 0;
+    }
+    .bubble.user { margin-left: auto; }
+    .bubble.user .text {
+      background: #FFF; color: var(--dark);
+      border-radius: 16px 16px 0 16px;
+    }
+    .avatar { width:48px; height:48px; border-radius:50%; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    .text { padding:14px; font-size:1rem; line-height:1.4; }
+
+    .right-panel {
+      display: flex; align-items: center; justify-content: center; background: #FAFAFA;
+    }
+
+    .auth-form {
+      width:100%; max-width:320px; padding:40px;
+      background:#FFF; border-radius:16px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.05); text-align:center;
+    }
+
+    .auth-form h2 {
+      margin-bottom:30px; font-size:1.8rem; color:var(--dark);
+    }
+
+    .field { position:relative; margin-bottom:20px; }
+    .field i {
+      position:absolute; left:12px; top:50%;
+      transform:translateY(-50%); color: var(--coral);
+    }
+
+    .field input {
+      width:100%; padding:12px 12px 12px 40px;
+      border:1px solid #DDD; border-radius:12px; font-size:1rem;
+    }
+
+    .forgot {
+      margin-top:-10px; margin-bottom:20px; text-align:right;
+    }
+
+    .forgot a {
+      font-size:0.9rem; color: var(--coral); text-decoration:none;
+    }
+
+    .forgot a:hover { text-decoration:underline; }
+
+    .auth-form button {
+      width:100%; padding:14px; background: var(--coral);
+      border:none; border-radius:12px; color:#FFF;
+      font-size:1rem; cursor:pointer; transition:background 0.3s;
+    }
+
+    .auth-form button:hover { background:#E65100; }
+
+    .login-link {
+      margin-top:15px; font-size:0.9rem; color:#888;
+    }
+
+    .login-link a {
+      color:var(--dark); font-weight:600; text-decoration:none;
+    }
+
+    /* Popup Message */
+    .popup-msg {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 99;
+    }
+
+    .popup-msg.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="location.href='./home.html'">← Back</button>
+  <div class="container">
+    <div class="left-panel">
+      <h1 class="logo">Balanced Diet</h1>
+      <div class="chat">
+        <div class="bubble doctor"><img src="./doctor.png" alt="Doctor" class="avatar"/><div class="text">Good morning! How can I help with your diet today?</div></div>
+        <div class="bubble user"><img src="./user.png" alt="You" class="avatar"/><div class="text">I need advice on a low-carb meal plan.</div></div>
+        <div class="bubble doctor"><img src="./doctor.png" alt="Doctor" class="avatar"/><div class="text">Focus on veggies, lean protein, and healthy fats.</div></div>
+        <div class="bubble user"><img src="./user.png" alt="You" class="avatar"/><div class="text">Thank you, Doctor—it means a lot!</div></div>
+        <div class="bubble doctor"><img src="./doctor.png" alt="Doctor" class="avatar"/><div class="text">You’re always welcome 😊</div></div>
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <form class="auth-form" id="loginForm">
+        <h2>Log In</h2>
+        <div class="field"><i class="fas fa-envelope"></i><input type="email" id="email" placeholder="Email Address" required /></div>
+        <div class="field"><i class="fas fa-lock"></i><input type="password" id="password" placeholder="Password" minlength="6" required /></div>
+        <div class="forgot"><a href="#" id="forgot">Forgot password?</a></div>
+        <button type="submit">Log In</button>
+        <p class="login-link">Don’t have an account? <a href="./register.html">Sign up</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBvGkRyJQiU6qiod0BGgjkQdspZ1ZskKuc",
+      authDomain: "balanced-bite-545a9.firebaseapp.com",
+      projectId: "balanced-bite-545a9",
+      storageBucket: "balanced-bite-545a9.firebasestorage.app",
+      messagingSenderId: "96942250358",
+      appId: "1:96942250358:web:7e644d656b33b61507c257"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    const loginForm = document.getElementById("loginForm");
+
+    function showPopup(msg) {
+      const popup = document.createElement("div");
+      popup.className = "popup-msg";
+      popup.textContent = msg;
+      document.body.appendChild(popup);
+      requestAnimationFrame(() => popup.classList.add("show"));
+      setTimeout(() => {
+        popup.classList.remove("show");
+        popup.remove();
+      }, 2000);
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        showPopup("Login successful!");
+        setTimeout(() => {
+          window.location.href = "http://127.0.0.1:5500/balance/main.html";
+        }, 2000);
+      } catch (error) {
+        const msg =
+          error.code === "auth/wrong-password" ? "Incorrect password." :
+          error.code === "auth/user-not-found" ? "No account with that email." :
+          error.code === "auth/invalid-credential" ? "Invalid credentials." :
+          error.message;
+        alert(msg);
+      }
+    });
+
+    document.getElementById("forgot").addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = prompt("Enter your email for password reset:");
+      if (!email) return;
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showPopup(`Reset link sent to ${email}`);
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
+</body>
+</html>

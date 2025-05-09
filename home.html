@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balanced Diet</title>
+  <style>
+    :root {
+      --beige: #F5EFE6;
+      --green: #75C5A9;
+      --coral: #FF6F61;
+      --dark:  #0B3D2E;
+      --text:  #0B3D2E;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER: quote + Sign In */
+    header {
+      background: var(--beige);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-quote {
+      font-style:normal;
+      font-family:Arial, Helvetica, sans-serif;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--dark);
+      text-align: center;
+      margin: auto;
+    }
+    .signin {
+      background: var(--coral);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+    .panel { flex: 1; position: relative }
+
+    /* CHAT PANEL */
+    .left {
+      background: var(--green);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .chat-card {
+      background: var(--beige);
+      width: 82%;
+      height: 82%;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      padding-right: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+    .message {
+      position: relative;
+      max-width: 70%;
+      padding: 16px;
+      padding-top: 24px; /* room for avatar */
+      border-radius: 12px;
+      color: #fff;
+      font-size: .95rem;
+      white-space: nowrap;
+    }
+    .message.doctor {
+      background: var(--green);
+      align-self: flex-start;
+    }
+    .message.user {
+      background: var(--coral);
+      align-self: flex-end;
+    }
+    .avatar {
+      position: absolute;
+      top: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--beige);
+      transform: translateY(-50%);
+    }
+    .message.doctor .avatar { left: 8px; }
+    .message.user   .avatar { right: 8px; }
+
+    .input-container {
+      margin-top: 16px;
+      background: var(--green);
+      height: 48px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+    }
+    .input-container span {
+      flex: 1; color: #fff; opacity: .7; font-size: .95rem;
+    }
+    .input-container button {
+      background: none; border: none; color: #fff;
+      font-size: 1.4rem; cursor: pointer;
+    }
+
+    /* ILLUSTRATION PANEL */
+    .right {
+      background: var(--coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* Floating title over illustration */
+    .platform-name {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: var(--dark);
+      pointer-events: none;
+    }
+    .illustration {
+      width: 60%;
+      max-width: 360px;
+      border-radius: 16px;
+      background: var(--beige) url("./doctor-patient.png") center/cover no-repeat;
+      aspect-ratio: 4/3;
+      z-index: 1;
+      margin-bottom: 24px;
+    }
+
+    /* Decorative icons around illustration */
+    .decor {
+      position: absolute;
+      font-size: 2.5rem;
+      opacity: 0.85;
+      z-index: 0;
+    }
+    .decor.apple  { top: 18%;  left: 12%; }
+    .decor.salad  { top: 48%;  left: 8%;  }
+    .decor.pill   { top: 14%;  right: 18%; }
+    .decor.water  { bottom: 18%; left: 18%; }
+    .decor.leaf   { bottom: 22%; right: 22%; }
+
+    /* Interactive icon row */
+    .icons {
+      display: flex;
+      gap: 24px;
+      margin-top: 16px;
+      z-index: 1;
+    }
+    .icons .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--beige);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      color: var(--dark);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="header-quote">
+      You don’t have to eat less, you just have to eat right.
+    </span>
+    <button class="signin" onclick="location.href='./login.html'">Sign In</button>
+  </header>
+
+  <main>
+    <!-- Chat Panel -->
+    <div class="panel left">
+      <div class="chat-card">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="input-container">
+          <span>Type a message</span>
+          <button>→</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Illustration Panel -->
+    <div class="panel right">
+      <!-- Decorative background icons -->
+      <div class="decor apple">🍎</div>
+      <div class="decor salad">🥗</div>
+      <div class="decor pill">💊</div>
+      <div class="decor water">💧</div>
+      <div class="decor leaf">🌿</div>
+
+      <!-- Main doctor–patient image -->
+      <div class="illustration"></div>
+
+      <!-- Floating platform name -->
+      <div class="platform-name">Balanced Diet</div>
+
+      <!-- Interactive icon row -->
+      <div class="icons">
+        <div class="icon">🍎</div>
+        <div class="icon">😊</div>
+        <div class="icon">🥗</div>
+        <div class="icon">💊</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // 15‑line looping conversation
+    const msgs = [
+      "Hello, how can I help?",
+      "I have a headache.",
+      "How long has this been going on?",
+      "It started last week.",
+      "Any other symptoms?",
+      "No, just headaches.",
+      "Are you sleeping well?",
+      "Yes, I’m sleeping fine.",
+      "Changed your diet recently?",
+      "No, everything’s the same.",
+      "Exercise regularly?",
+      "Not really.",
+      "Feeling stressed?",
+      "A bit at work.",
+      "Try some stress management."
+    ];
+
+    const chat = document.getElementById("chatMessages");
+    const doctorIcon = "./doctor.png";
+    const userIcon   = "./user.png";
+
+    // Build chat messages
+    msgs.forEach((text, i) => {
+      const who = i % 2 === 0 ? "doctor" : "user";
+      const m = document.createElement("div");
+      m.className = `message ${who}`;
+      const img = document.createElement("img");
+      img.className = "avatar";
+      img.src = who === "doctor" ? doctorIcon : userIcon;
+      img.alt = who;
+      m.appendChild(img);
+      m.appendChild(document.createTextNode(text));
+      chat.appendChild(m);
+    });
+
+    // Duplicate for infinite loop
+    const totalHeight = chat.scrollHeight;
+    chat.innerHTML += chat.innerHTML;
+
+    // Auto‑scroll function
+    const speed = 1, interval = 30;
+    function scrollLoop() {
+      chat.scrollTop += speed;
+      if (chat.scrollTop >= totalHeight) {
+        chat.scrollTop = 0;
+      }
+    }
+    setTimeout(() => setInterval(scrollLoop, interval), 500);
+  </script>
+</body>
+</html>
